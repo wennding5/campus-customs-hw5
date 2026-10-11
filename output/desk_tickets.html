@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Campus Customs Desk Ticket Plans</title>
+  <style>
+    :root { --navy:#17365d; --blue:#2f6da3; --ink:#243447; --muted:#607286; --line:#d7e1ea; --paper:#fff; --wash:#f4f8fb; --accent:#e8b85c; }
+    * { box-sizing:border-box; }
+    body { margin:0; color:var(--ink); background:var(--wash); font:16px/1.55 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+    header { color:#fff; background:linear-gradient(135deg,var(--navy),#285c88); padding:2.2rem max(1.2rem,calc((100% - 1100px)/2)); }
+    h1 { margin:0 0 .35rem; font-size:clamp(1.7rem,4vw,2.5rem); }
+    header p { margin:0; color:#dce9f3; }
+    main { max-width:1100px; margin:1.4rem auto 3rem; padding:0 1.2rem; }
+    .tabs { display:flex; flex-wrap:wrap; gap:.55rem; margin-bottom:1rem; }
+    .tab { border:1px solid var(--line); background:#fff; color:var(--navy); padding:.7rem 1rem; border-radius:999px; cursor:pointer; font-weight:700; }
+    .tab[aria-selected="true"] { background:var(--blue); color:#fff; border-color:var(--blue); }
+    .panel { display:none; background:var(--paper); border:1px solid var(--line); border-radius:14px; padding:1.35rem; box-shadow:0 5px 20px #17365d12; }
+    .panel.active { display:block; }
+    h2 { margin-top:0; color:var(--navy); }
+    h3 { color:var(--blue); margin-bottom:.35rem; }
+    h4 { margin-bottom:.3rem; color:var(--navy); }
+    .facts { display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:.65rem; margin:1rem 0; }
+    .fact { padding:.7rem .8rem; background:#f8fbfd; border:1px solid var(--line); border-radius:9px; }
+    .fact strong { display:block; color:var(--muted); font-size:.78rem; text-transform:uppercase; letter-spacing:.04em; }
+    .callout { border-left:4px solid var(--accent); background:#fff9eb; padding:.8rem 1rem; margin:1rem 0; }
+    .plan { border-top:1px solid var(--line); margin-top:1.2rem; padding-top:1rem; }
+    ol, ul { padding-left:1.3rem; }
+    li { margin:.42rem 0; }
+    code { background:#edf3f7; padding:.1rem .3rem; border-radius:4px; color:#17365d; }
+    .actual { min-height:110px; border:1px dashed #aebdca; background:#fbfcfd; border-radius:9px; padding:1rem; color:var(--muted); }
+    .blank { color:var(--muted); font-style:italic; }
+    footer { margin-top:1.6rem; color:var(--muted); font-size:.9rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Campus Customs Desk Ticket Plans</h1>
+    <p>Problem 6 planning view · facts read through the MCP tools from <code>data/campus_customs_new.db</code></p>
+  </header>
+  <main>
+    <nav class="tabs" role="tablist" aria-label="Desk planning tabs">
+      <button class="tab" role="tab" aria-selected="true" aria-controls="ticket-101" id="tab-101">Ticket 101</button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="ticket-102" id="tab-102">Ticket 102</button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="ticket-103" id="tab-103">Ticket 103</button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="cash" id="tab-cash">Cash</button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="reflection" id="tab-reflection">Reflection</button>
+    </nav>
+
+    <section class="panel active" role="tabpanel" id="ticket-101" aria-labelledby="tab-101">
+      <h2>Ticket 101 · Customer order: Bulldog tee</h2>
+      <div class="facts">
+        <div class="fact"><strong>Requester</strong>Tauhid Zaman</div>
+        <div class="fact"><strong>Request</strong>1 Classic Bulldog Tee · size S</div>
+        <div class="fact"><strong>Available</strong>0 in Aisle B · shortfall 1</div>
+        <div class="fact"><strong>Price</strong>$28 list · $8 unit cost</div>
+        <div class="fact"><strong>Invoice</strong>#501 open · $840</div>
+        <div class="fact"><strong>Vendor</strong>Bulldog Print Co · 5-day lead</div>
+      </div>
+      <div class="callout"><strong>Rules that control the plan:</strong> the shop date is 2026-08-31; the vendor cannot ship while invoice 501 is unpaid; any payment requires human approval and must not make cash negative.</div>
+      <div class="plan">
+        <h3>Expected plan</h3>
+        <p><strong>Boss contacts inventory first.</strong> Inventory owns the size-level stock and can establish the one-unit shortfall before anyone promises a customer or asks accounting to prepare a payment.</p>
+        <ol>
+          <li><strong>Boss → inventory:</strong> call <code>inspect_customer_order_ticket(101)</code> and <code>get_inventory_status("CC-TEE-WHITE", "S")</code>. Confirm zero size-S stock, the $28 price, the Bulldog Print Co relationship, its five-day lead time, and the open invoice block. Do not reserve nonexistent stock.</li>
+          <li><strong>Inventory → accounting:</strong> delegate only after the shortfall is confirmed. Accounting calls <code>get_accounting_snapshot()</code> and reviews invoice 501, cash, and existing payments. It prepares an invoice-payment or replenishment recommendation for human approval; it does not pay or authorize shipment.</li>
+          <li><strong>Accounting → customer service:</strong> after the factual replenishment path is clear, delegate to customer service. It calls <code>get_customer_service_context(101)</code> and drafts a response explaining the size-S stockout and a possible five-day vendor lead time, explicitly avoiding a promise until the invoice is approved and paid.</li>
+          <li><strong>Boss decides:</strong> present the draft and approval request to a human, keep the ticket open, and record that shipment is blocked by invoice 501. Facilities is not relevant to this customer-order ticket.</li>
+        </ol>
+        <h4>Actual</h4>
+        <div class="actual"><p><strong>Resolved · 2026-08-31</strong></p><ul><li><strong>Agents:</strong> boss, accounting, customer service.</li><li><strong>Delegation:</strong> boss → accounting for invoice/cash feasibility; boss → customer service for a factual customer draft.</li><li><strong>MCP tools:</strong> <code>list_open_tickets</code>, <code>inspect_customer_order_ticket</code>, <code>get_inventory_status</code>, <code>get_accounting_snapshot</code>, <code>get_customer_service_context</code>, <code>pay_invoice</code>, <code>receive_restock</code>, <code>resolve_ticket</code>.</li><li><strong>Outcome:</strong> human approved invoice 501 for $840 (payment 1); shipment block cleared, one CC-TEE-WHITE size-S unit was received, and ticket 101 was resolved. Checking moved $3,400 → $2,560. Customer draft was prepared and not sent.</li></ul></div>
+      </div>
+    </section>
+
+    <section class="panel" role="tabpanel" id="ticket-102" aria-labelledby="tab-102">
+      <h2>Ticket 102 · Rent notice</h2>
+      <div class="facts">
+        <div class="fact"><strong>Requester</strong>Elm City Properties</div>
+        <div class="fact"><strong>Lease</strong>Chapel Street shop · lease 1</div>
+        <div class="fact"><strong>Rent</strong>$2,400 due 2026-09-02</div>
+        <div class="fact"><strong>Cash</strong>Checking balance $3,400</div>
+        <div class="fact"><strong>Payments</strong>None recorded</div>
+        <div class="fact"><strong>Ticket</strong>Open · email says due in 2 days</div>
+      </div>
+      <div class="callout"><strong>Rules that control the plan:</strong> use <code>desk.date_today</code> (2026-08-31), require human approval before payment, and leave a non-negative checking balance. A $2,400 payment would leave $1,000.</div>
+      <div class="plan">
+        <h3>Expected plan</h3>
+        <p><strong>Boss contacts facilities first.</strong> Facilities owns lease terms and due-date interpretation, so it should verify the notice before accounting prepares anything.</p>
+        <ol>
+          <li><strong>Boss → facilities:</strong> call <code>inspect_rent_ticket(102)</code> and <code>get_facilities_snapshot()</code>. Confirm lease 1, the landlord, due date, current desk date, cash context, and that no rent payment has already been recorded.</li>
+          <li><strong>Facilities → accounting:</strong> delegate the verified rent obligation. Accounting calls <code>get_accounting_snapshot()</code>, checks the $3,400 checking balance and payment history, and prepares a $2,400 payment recommendation that leaves $1,000. It waits for human approval.</li>
+          <li><strong>Boss decides:</strong> route the recommendation for approval and keep the ticket open until a human confirms payment. Inventory and customer service are not relevant; there is no product or customer response to handle.</li>
+        </ol>
+        <h4>Actual</h4>
+        <div class="actual"><p><strong>Resolved · 2026-08-31</strong></p><ul><li><strong>Agents:</strong> boss, facilities, accounting.</li><li><strong>Delegation:</strong> boss → facilities to verify lease and due date; boss → accounting for cash and approval feasibility.</li><li><strong>MCP tools:</strong> <code>list_open_tickets</code>, <code>inspect_rent_ticket</code>, <code>get_facilities_snapshot</code>, <code>get_accounting_snapshot</code>, <code>pay_rent</code>, <code>resolve_ticket</code>.</li><li><strong>Outcome:</strong> human approved $2,400 rent for lease 1 (payment 2); ticket 102 was resolved. Checking moved $2,560 → $160. No duplicate payment was created.</li></ul></div>
+      </div>
+    </section>
+
+    <section class="panel" role="tabpanel" id="ticket-103" aria-labelledby="tab-103">
+      <h2>Ticket 103 · Bulk hoodie discount</h2>
+      <div class="facts">
+        <div class="fact"><strong>Requester</strong>Yale AI Club</div>
+        <div class="fact"><strong>Request</strong>20 Basic Hoodie Big Yale · size M</div>
+        <div class="fact"><strong>Available</strong>8 size M · replenishment 12</div>
+        <div class="fact"><strong>Price</strong>$58 list · $22 unit cost</div>
+        <div class="fact"><strong>Totals</strong>$1,160 list · $440 unit cost</div>
+        <div class="fact"><strong>Vendor</strong>Bulldog Print Co · 5-day lead</div>
+      </div>
+      <div class="callout"><strong>Rules that control the plan:</strong> do not invent a discount; use actual cost and list price. Replenishment is subject to the vendor's five-day lead time and invoice 501's unpaid-shipment block. Any purchase or payment needs human approval and cannot create a negative cash balance.
+      </div>
+      <div class="plan">
+        <h3>Expected plan</h3>
+        <p><strong>Boss contacts inventory first.</strong> Inventory must confirm the exact size-M shortfall before accounting evaluates margin or a purchase recommendation.</p>
+        <ol>
+          <li><strong>Boss → inventory:</strong> call <code>inspect_bulk_pricing_ticket(103)</code> and <code>get_inventory_status("CC-HOOD-NAVY", "M")</code>. Confirm 8 available, 12 needed, $22 cost, $58 list price, the candidate vendor, five-day lead time, and open invoice 501.</li>
+          <li><strong>Inventory → accounting:</strong> delegate the replenishment facts. Accounting calls <code>get_accounting_snapshot()</code>, checks cash and invoice status, calculates the $440 unit-cost basis and the $1,160 list-price ceiling, and prepares a purchase-order/payment recommendation for human approval. It must not authorize a shipment while the invoice is open.</li>
+          <li><strong>Accounting → customer service:</strong> once an approvable offer boundary exists, customer service calls <code>get_customer_service_context(103)</code> and drafts a response to Yale AI Club. The draft may explain the 8 immediately available units and the 12-unit replenishment path, but cannot promise timing or a discount that has not been approved.</li>
+          <li><strong>Boss decides:</strong> combine the inventory and accounting recommendations, route any discount, purchase, or invoice payment for human approval, and leave the customer-facing draft unsent. Facilities is not relevant to this product-pricing ticket.</li>
+        </ol>
+        <h4>Actual</h4>
+        <div class="actual"><p><strong>Unresolved / safely stopped · 2026-08-31</strong></p><ul><li><strong>Agents:</strong> boss, inventory, accounting.</li><li><strong>Delegation:</strong> boss → inventory for size-M availability and replenishment; boss → accounting for pricing, margin, cash, and approval feasibility.</li><li><strong>MCP tools:</strong> <code>list_open_tickets</code>, <code>inspect_bulk_pricing_ticket</code>, <code>get_inventory_status</code>, <code>get_accounting_snapshot</code>. No payment, purchase, or receipt tool was executed.</li><li><strong>Outcome:</strong> 8 of 20 hoodies were available; 12 would cost $264 to replenish with a 5-day lead time. Checking was $160, leaving a $104 shortfall, so no approval or payment was requested and ticket 103 remains open. No discount was invented and no customer message was sent.</li></ul></div>
+      </div>
+    </section>
+
+    <section class="panel" role="tabpanel" id="cash" aria-labelledby="tab-cash">
+      <h2>Cash</h2>
+      <div class="facts"><div class="fact"><strong>Starting checking</strong>$3,400</div><div class="fact"><strong>Ticket 101 · invoice 501</strong>−$840</div><div class="fact"><strong>Ticket 102 · lease 1 rent</strong>−$2,400</div><div class="fact"><strong>Ticket 103</strong>$0 change (funding shortfall)</div><div class="fact"><strong>Ending checking</strong>$160</div></div><p>Reconciliation: $3,400 − $840 − $2,400 = $160. This equals <code>cash_accounts</code> in <code>data/campus_customs_new.db</code>; payments 1 and 2 are the only recorded payments.</p>
+    </section>
+
+    <section class="panel" role="tabpanel" id="reflection" aria-labelledby="tab-reflection">
+      <h2>Reflection · what I learned from the three runs</h2>
+      <p>I reset the working copy before starting, so my comparison uses the same $3,400 checking balance and the same shop date, 2026-08-31, that appear in the expected plans. I used the actual sections, <code>resolved_tickets.json</code>, and the append-only audit trail as my evidence. Two tickets resolved; ticket 103 correctly stayed open.</p>
+
+      <div class="plan">
+        <h3>Ticket 101 · the plan mostly worked</h3>
+        <p>The expected plan said boss should start with inventory, then accounting, then customer service. The recorded run used boss, accounting, and customer service. Accounting checked the invoice and cash feasibility, and customer service prepared a factual draft. The tool activity included <code>inspect_customer_order_ticket</code>, <code>get_inventory_status</code>, <code>get_accounting_snapshot</code>, and <code>get_customer_service_context</code>; after approval it used <code>pay_invoice</code>, <code>receive_restock</code>, and <code>resolve_ticket</code>.</p>
+        <p>The main difference is ordering: the log shows boss delegated to accounting and customer service rather than showing a separate inventory delegation first. That did not hurt the outcome because the relevant stock and invoice facts were still read through MCP before any promise was made. A human approved invoice 501 for $840 (payment 1), the stock receipt added one CC-TEE-WHITE size-S unit, and the ticket became resolved. Cash fell from $3,400 to $2,560. I consider this a good result, although the boss’s delegation plan could have been more explicit about who confirms the shortfall first.</p>
+      </div>
+
+      <div class="plan">
+        <h3>Ticket 102 · specialist routing was efficient</h3>
+        <p>The expected plan put facilities first because the issue was lease 1 rent due on 2026-09-02. The actual team was boss, facilities, and accounting, with boss delegating lease and due-date verification to facilities and cash feasibility to accounting. The evidence includes <code>inspect_rent_ticket</code>, <code>get_facilities_snapshot</code>, <code>get_accounting_snapshot</code>, <code>pay_rent</code>, and <code>resolve_ticket</code>.</p>
+        <p>This closely matched the plan and avoided unnecessary inventory or customer-service work. Human approval released $2,400 (payment 2), moving cash from $2,560 to $160, and the ticket resolved. The only tension is that the plan described waiting with the ticket open until approval, while the run completed the payment and resolution in one workflow after approval. That was helpful for speed and still respected the approval gate; it would have been harmful only if the tool had paid before the approval record, which it did not.</p>
+      </div>
+
+      <div class="plan">
+        <h3>Ticket 103 · stopping was the correct result</h3>
+        <p>The expected plan asked boss to contact inventory first, then accounting, with customer service only after an approvable offer existed. The actual agents were boss, inventory, and accounting. Inventory used <code>inspect_bulk_pricing_ticket</code> to establish that 8 of 20 size-M hoodies were available and that 12 more would cost $264 with a five-day vendor lead time. Accounting used <code>get_accounting_snapshot</code> and calculated $58 list price, $22 unit cost, $1,160 list revenue, and a $104 funding gap after the cash balance reached $160.</p>
+        <p>The actual run did not call customer service, did not invent a discount, and did not use a payment or receipt tool. That differs from the expected plan’s possible customer-service handoff, but the difference helped: there was no approved offer to describe. Leaving ticket 103 open was more accurate than claiming all 20 could ship. The system still needs authorized pricing guidance and funding before it can resolve this ticket.</p>
+      </div>
+
+      <div class="plan">
+        <h3>How well the multi-agent design performed</h3>
+        <p>I think the team performed best when the ticket crossed a real responsibility boundary. Facilities interpreted the lease, inventory handled size-level stock, accounting checked invoices and cash, and boss made the final decision. The approval flow also worked as a useful safety boundary: payments 1 and 2 were human-approved, the balance never went negative, and there were no duplicate payments. The audit trail records the agent names, delegations, tool calls, results, and stop reasons, which made the decisions reviewable.</p>
+        <p>The cost was coordination. Every delegation adds model calls, context, and chances for ordering or naming inconsistencies. Ticket 102 could have been handled by one well-prompted boss using <code>inspect_rent_ticket</code>, <code>get_accounting_snapshot</code>, and the approval route. Ticket 101 could also have been a single workflow because the stockout, invoice block, and response draft are a short chain. That would be faster and cheaper, but it would blur ownership and make it easier to skip a specialist check. Ticket 103 benefited most from two specialists because pricing, stock, vendor lead time, and cash feasibility had to be challenged before stopping. My improvement would be to keep the specialist roles but give boss a clearer tool order and avoid delegating to an agent whose output cannot yet change the decision.</p>
+      </div>
+
+      <div class="plan">
+        <h3>Three realistic problems this system can solve now</h3>
+        <ol>
+          <li><strong>Single-item stockout with an unpaid vendor invoice.</strong> Inventory can inspect SKU and size, accounting can inspect the invoice and cash, and customer service can draft a truthful delay or partial-fulfillment response. After human approval, <code>approve_payment</code>, <code>receive_restock</code>, and <code>resolve_ticket</code> can complete the same pattern as ticket 101.</li>
+          <li><strong>A new rent or lease notice.</strong> Facilities can read the lease and <code>desk.date_today</code>, accounting can check existing rent payments and the checking balance, and boss can route a human-approved <code>pay_rent</code> request without involving product agents.</li>
+          <li><strong>A small bulk order with enough cash and known pricing.</strong> Inventory and accounting can compare available units, unit cost, list price, vendor lead time, and cash; customer service can draft an offer; then a human can approve the purchase or invoice payment. The ticket 103 run demonstrates that the same tools can also stop safely when funding is insufficient.</li>
+        </ol>
+      </div>
+
+      <div class="plan">
+        <h3>Three problems the current system cannot solve yet</h3>
+        <ol>
+          <li><strong>Actually send a customer email or negotiate a discount.</strong> Customer service only drafts. This needs an outbound email tool with recipient, template, and delivery status, plus a pricing-policy table and a separate human approval for discounts.</li>
+          <li><strong>Forecast cash or choose a financing source for the $104 gap in ticket 103.</strong> Current tools show present balances and payments but have no bank-credit, sales-forecast, borrowing-limit, or cash-flow data. I would add forecast and financing tables/tools and an accounting or treasury agent with explicit approval rules.</li>
+          <li><strong>Track a vendor shipment from purchase order through delivery, delay, and return.</strong> The system has vendor lead days and a stock-receipt tool, but no purchase-order status, tracking number, carrier event, receiving discrepancy, or returns data. It would need those tables and MCP tools, plus a procurement or receiving agent.</li>
+        </ol>
+      </div>
+
+      <div class="callout"><strong>My overall conclusion:</strong> the strongest evidence of success is not that every ticket closed. It is that the agents resolved 101 and 102 with exact approved cash changes, and refused to fake a solution for 103 when $264 exceeded the available $160. The next improvement is better delegation sequencing and broader operational data, while keeping MCP and human approval as the control points.</div>
+    </section>
+
+    <footer>Expected plans are based on MCP results captured from the working database. Actual sections record the real Problem 9 runs; ticket 103 remains open because funding and discount authority were not established.</footer>
+  </main>
+  <script>
+    const tabs = [...document.querySelectorAll('.tab')];
+    const panels = [...document.querySelectorAll('.panel')];
+    tabs.forEach(tab => tab.addEventListener('click', () => {
+      tabs.forEach(item => item.setAttribute('aria-selected', item === tab ? 'true' : 'false'));
+      panels.forEach(panel => panel.classList.toggle('active', panel.id === tab.getAttribute('aria-controls')));
+    }));
+  </script>
+</body>
+</html>
