@@ -70,7 +70,12 @@
         "decided_by": "boss",
         "rationale": "No discount authorization or policy is stored; use list price while preserving positive unit margin."
       },
-      "superseded_analysis": "The earlier $264 replenishment analysis was not required for this price_override ticket; it remains documented in the append-only audit trail as a corrected root-cause finding."
+      "superseded_analysis": "The earlier $264 replenishment analysis was not required for this price_override ticket; it remains documented in the append-only audit trail as a corrected root-cause finding.",
+      "execution_evidence": {
+        "analysis": "PydanticAI audit records show boss delegated factual analysis to inventory and accounting before the workflow correction.",
+        "final_decision": "The final $58 decision was executed by a direct MCP record_price_decision call; no new PydanticAI model run is claimed.",
+        "cash_change": 0.0
+      }
     }
   ],
   "reconciliation": "3400.00 - 840.00 - 2400.00 + 0.00 = 160.00; matches cash_accounts.checking in campus_customs_new.db"
