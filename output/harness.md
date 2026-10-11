@@ -212,7 +212,7 @@ The route-facing MCP additions are `get_ticket_statuses()` (reads ticket status 
 
 The React/Vite/TypeScript dashboard is in `frontend/` and runs with `npm run dev` at `http://localhost:5173`. It calls the FastAPI routes at `http://localhost:8000`, uses live ticket, event, and checking data, and documents its visual system in `output/design.md`.
 
-## Problem 9 run verification
+## Problem 9 run verification (historical pre-correction)
 
 - The working copy was reset from `data/campus_customs.db` before the run. Starting `cash_accounts.checking` was **$3,400.00**; the original database remained untouched.
 - Ticket 101 resolved with boss, accounting, and customer service. Human approval paid invoice 501 for **$840.00** (payment 1), then `receive_restock` recorded one CC-TEE-WHITE size-S unit and `resolve_ticket` closed the ticket.
@@ -221,19 +221,19 @@ The React/Vite/TypeScript dashboard is in `frontend/` and runs with `npm run dev
 - Cash reconciliation: `$3,400.00 - $840.00 - $2,400.00 = $160.00`. The ending value matches `cash_accounts`; only payments 1 and 2 exist, and no negative or duplicate payment occurred.
 - Real agent/MCP activity was appended to `output/audit_trail.json`; the log is append-only. Ticket 103's unresolved funding and pricing-authority issue is intentionally flagged.
 
-## Problem 9 follow-up investigation: Ticket 103
+## Problem 9 follow-up investigation: Ticket 103 (historical pre-correction)
 
 The current working database was inspected without reset. Ticket 103 still requests 20 `CC-HOOD-NAVY` size-M hoodies. `inventory` has 8 size-M units; `pricing` records a $22 unit cost and $58 list price; the 12-unit shortage costs $264. `vendors` contains only Bulldog Print Co for apparel reprint (5 days), Elm City Gifts for mugs/small goods, and QuickShip CT for local courier, so there is no qualified alternate apparel vendor. Invoice 501 is paid, and `payments` contains only the approved $840 invoice payment and $2,400 rent payment. `cash_accounts.checking` is $160.
 
 A smaller order or partial fulfillment was not treated as a resolution because the ticket explicitly requests 20 units and no customer authorization or changed requirement is stored. Paying $264 would make checking negative by $104, and no customer-revenue, financing, or other funding record exists. The existing agent workflow therefore correctly keeps ticket 103 open. Tickets 101 and 102 remain resolved; `$3,400 - $840 - $2,400 = $160`, matching the database.
 
-## Problem 9 assignment contradiction analysis
+## Problem 9 assignment contradiction analysis (historical pre-correction)
 
 The complete available HW5 instructions and ticket records do not provide a funding exception. If the three tickets are interpreted as requiring full operational fulfillment, the cash obligations are invoice 501 `$840` + lease 1 rent `$2,400` + 12 missing hoodies at `$22` each (`$264`) = **$3,504**. Starting checking is **$3,400**, so the total exceeds starting cash by **$104**. In the actual sequence, the first two approved payments leave `$160`; `$160 - $264 = -$104`, which the MCP approval guard correctly rejects.
 
 The database has no vendor-credit terms, deferred payment schedule, customer-revenue receipt, financing account, or authorized partial-fulfillment record. Ticket 103 explicitly requests 20 hoodies; only 8 are stocked. The existing implementation does not unnecessarily block a valid recorded action: `approve_payment` supports a human-approved `purchase_order` but correctly rejects the amount that would make cash negative, and `resolve_ticket` is intentionally reserved for completed operational work. Marking 103 resolved would therefore require inventing a business decision or violating the shop rules.
 
-## Problem 9 root-cause correction: price overrides are pricing decisions
+## Problem 9 root-cause correction: price overrides are pricing decisions (superseded by final decision)
 
 The prior workflow incorrectly interpreted ticket 103's `price_override` type as an immediate order fulfillment. The corrected workflow adds `prepare_price_override`, which reads the actual ticket, pricing, requested-size stock, and stored pricing authorization records without changing data. It recommends the authoritative `$58` list price and `$22` unit-cost floor, leaves the discount rate unset because no authorization exists, and explicitly creates no purchase obligation. Eight size-M units are available; that fact informs the offer but does not require buying 12 more units. Ticket 103 therefore remains open pending human approval of a specific discount or list-price offer. The reset-and-rerun produced only the two legitimate approved payments: `$840` invoice 501 and `$2,400` rent, leaving checking at `$160`.
 
@@ -242,3 +242,6 @@ The prior workflow incorrectly interpreted ticket 103's `price_override` type as
 The corrected rerun distinguishes payment approval from pricing decisions. Boss and Accounting evaluated ticket 103 through `inspect_bulk_pricing_ticket` and `prepare_price_override`: list price is `$58`, unit cost is `$22`, and 8 of 20 requested units are stocked. Because no assignment rule or database record requires human approval for a price decision, Boss used final-decision authority to call `record_price_decision` at `$58` per unit. This records a `pricing_decisions` row, resolves ticket 103, and changes cash by `$0.00`. No discount was invented, no purchase was made, and no customer message was sent.
 
 Final statuses are 101 resolved, 102 resolved, and 103 resolved. Payments remain exactly invoice 501 `$840` and rent `$2,400`; checking remains `$160` and reconciles to `$3,400 - $840 - $2,400 + $0`.
+
+
+The historical open/$104 statements above describe failed pre-correction runs. The final corrected run is recorded below and is authoritative for submission.
