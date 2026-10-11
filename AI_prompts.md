@@ -52,25 +52,25 @@
 2. Follow-up prompt: Not needed yet.
 3. Nothing was lacking from the prompt given before.
 
-## Problem 9 follow-up — Investigate and fix Ticket 103
+### Follow-up 1 — Investigate and fix Ticket 103
 
 1. Prompt typed: “Investigate and fix unresolved Ticket 103. Inspect the actual ticket and inventory, pricing, vendors, invoices, payments, and cash_accounts. Determine whether an alternative vendor, smaller valid order, partial fulfillment, or another database-supported solution can resolve the explicit 20-unit hoodie request. If a valid solution exists, use existing MCP tools and agent workflows with human approval and no negative cash, invented money, vendor terms, or bypassed MCP. Otherwise keep it open and document the blocker in `resolved_tickets.json`, `desk_tickets.html`, and the reflection. Verify all ticket statuses and cash against payment records, update `audit_trail.json`, `harness.md`, and `AI_prompts.md`, preserve the dashboard and Git history, do not reset or duplicate payments, test and commit, and push if authenticated.”
 2. Follow-up prompt: Not needed yet.
 3. Nothing was lacking from the prompt given before.
 
-## Problem 9 follow-up — Assignment contradiction investigation
+### Follow-up 2 — Assignment contradiction investigation
 
 1. Prompt typed: “Investigate why Problem 9 requires all three tickets resolved while Ticket 103 remains open. Read the complete available assignment instructions, original and working databases, ticket descriptions, shop rules, and current implementation. Verify whether 103 requires all 12 hoodies immediately, whether 101/102 require full immediate payment, whether vendor credit, payment terms, scheduling, or other authorized workflows exist, whether all cash/prices/quantities/invoices were interpreted correctly, and whether the agents unnecessarily restrict valid actions. Do not fabricate funds, alter the original database, bypass approval, falsely resolve tickets, change payment records, or reset without explanation. If no valid solution exists, provide a concise mathematical proof and identify the incompatible requirements. Record this prompt in `AI_prompts.md`, update the accurate Problem 9 artifacts, test, commit, and report statuses and cash.”
 2. Follow-up prompt: Not needed yet.
 3. Nothing was lacking from the prompt given before.
 
-## Problem 9 follow-up — Correct the price_override workflow
+### Follow-up 3 — Correct the price_override workflow
 
 1. Prompt typed: “Fix the root cause of Ticket 103. The ticket is type `price_override` with subject Bulk hoodie discount; it asks Yale AI Club for a bulk discount on 20 navy medium hoodies. Review the complete instructions and Boss, Accounting, Inventory, and Customer Service agents. Treat price_override tickets as pricing decisions rather than automatic purchase orders. Inspect actual stock and pricing, determine a defensible recommendation without inventing a discount rate, record the need for human authorization, reset the working database as Problem 9 requires, rerun all three tickets, preserve approvals and cash guards, update all dashboard/report/audit/harness/reflection artifacts, test, commit, and explain the root cause and final balance. Do not falsely resolve a ticket without pricing authorization.”
 2. Follow-up prompt: Not needed yet.
 3. Nothing was lacking from the prompt given before.
 
-## Problem 9 follow-up — Resolve authorized pricing decisions
+### Follow-up 4 — Resolve authorized pricing decisions
 
 1. Prompt typed: “Review the assignment rules and distinguish mandatory human approval for payments from approval requirements for pricing decisions. Do not invent a discount approval requirement. If Boss and Accounting are authorized to decide pricing, evaluate $58 list price, $22 unit cost, 20 requested units, and 8 in stock, make and record a defensible pricing decision through MCP, and resolve ticket 103 without cash movement. If approval is genuinely required, implement it. Update all Problem 9 artifacts, screenshots, audit trail, and prompt log based on actual execution, verify all three statuses and cash, and commit.”
 2. Follow-up prompt: Not needed yet.
