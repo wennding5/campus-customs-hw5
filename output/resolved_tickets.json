@@ -3,9 +3,92 @@
   "starting_checking_balance": 3400.0,
   "ending_checking_balance": 160.0,
   "tickets": [
-    {"ticket_id":101,"final_status":"resolved","outcome":"Invoice 501 paid and one CC-TEE-WHITE size-S unit received; customer draft prepared but not sent.","agents":["boss","accounting","customer service"],"delegations":["boss→accounting: invoice and cash feasibility","boss→customer service: factual response draft"],"human_approvals":[{"kind":"invoice","reference_id":501,"amount":840.0,"payment_id":1}],"cash_change":-840.0},
-    {"ticket_id":102,"final_status":"resolved","outcome":"Lease 1 rent paid before its 2026-09-02 due date.","agents":["boss","facilities","accounting"],"delegations":["boss→facilities: lease and due-date verification","boss→accounting: cash and approval feasibility"],"human_approvals":[{"kind":"rent","reference_id":1,"amount":2400.0,"payment_id":2}],"cash_change":-2400.0},
-    {"ticket_id":103,"final_status":"open","outcome":"Eight of 20 size-M hoodies available; replenishing 12 costs $264, but checking is $160, leaving a $104 shortfall. No payment or purchase made.","agents":["boss","inventory","accounting"],"delegations":["boss→inventory: stock and lead time","boss→accounting: pricing, margin, and cash feasibility"],"human_approvals":[],"cash_change":0.0,"unresolved_issue":"Needs authorized pricing guidance and funding before replenishment; vendor lead time is 5 days."}
+    {
+      "ticket_id": 101,
+      "final_status": "resolved",
+      "outcome": "Invoice 501 paid and one CC-TEE-WHITE size-S unit received; customer draft prepared but not sent.",
+      "agents": [
+        "boss",
+        "accounting",
+        "customer service"
+      ],
+      "delegations": [
+        "boss\u2192accounting: invoice and cash feasibility",
+        "boss\u2192customer service: factual response draft"
+      ],
+      "human_approvals": [
+        {
+          "kind": "invoice",
+          "reference_id": 501,
+          "amount": 840.0,
+          "payment_id": 1
+        }
+      ],
+      "cash_change": -840.0
+    },
+    {
+      "ticket_id": 102,
+      "final_status": "resolved",
+      "outcome": "Lease 1 rent paid before its 2026-09-02 due date.",
+      "agents": [
+        "boss",
+        "facilities",
+        "accounting"
+      ],
+      "delegations": [
+        "boss\u2192facilities: lease and due-date verification",
+        "boss\u2192accounting: cash and approval feasibility"
+      ],
+      "human_approvals": [
+        {
+          "kind": "rent",
+          "reference_id": 1,
+          "amount": 2400.0,
+          "payment_id": 2
+        }
+      ],
+      "cash_change": -2400.0
+    },
+    {
+      "ticket_id": 103,
+      "final_status": "open",
+      "outcome": "Eight of 20 size-M hoodies available; replenishing 12 costs $264, but checking is $160, leaving a $104 shortfall. No payment or purchase made.",
+      "agents": [
+        "boss",
+        "inventory",
+        "accounting"
+      ],
+      "delegations": [
+        "boss\u2192inventory: stock and lead time",
+        "boss\u2192accounting: pricing, margin, and cash feasibility"
+      ],
+      "human_approvals": [],
+      "cash_change": 0.0,
+      "unresolved_issue": "Needs authorized pricing guidance and funding before replenishment; vendor lead time is 5 days.",
+      "cash_shortfall_trace": {
+        "checking_before_replenishment": 160.0,
+        "shortage_units": 12,
+        "unit_cost": 22.0,
+        "required_replenishment_cash": 264.0,
+        "available_cash": 160.0,
+        "shortfall": 104.0,
+        "payments_considered": [
+          {
+            "payment_id": 1,
+            "kind": "invoice",
+            "ref_id": 501,
+            "amount": 840.0
+          },
+          {
+            "payment_id": 2,
+            "kind": "rent",
+            "ref_id": 1,
+            "amount": 2400.0
+          }
+        ],
+        "decision": "No approval requested and no payment made because $264 would make checking negative; vendor lead time is 5 days and no discount authority is recorded."
+      }
+    }
   ],
-  "reconciliation":"3400.00 - 840.00 - 2400.00 = 160.00; matches cash_accounts.checking in campus_customs_new.db"
+  "reconciliation": "3400.00 - 840.00 - 2400.00 = 160.00; matches cash_accounts.checking in campus_customs_new.db"
 }
