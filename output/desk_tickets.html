@@ -144,8 +144,8 @@
       </div>
 
       <div class="plan">
-        <h3>Ticket 103 · stopping was the correct result</h3>
-        <p>The expected plan asked boss to contact inventory first, then accounting, with customer service only after an approvable offer existed. The actual agents were boss, inventory, and accounting. Inventory used <code>inspect_bulk_pricing_ticket</code> to establish that 8 of 20 size-M hoodies were available and that 12 more would cost $264 with a five-day vendor lead time. Accounting used <code>get_accounting_snapshot</code> and calculated $58 list price, $22 unit cost, $1,160 list revenue, and a $104 funding gap after the cash balance reached $160.</p>
+        <h3>Ticket 103 · pricing decision corrected the workflow</h3>
+        <p>The expected plan asked boss to contact inventory first, then accounting, with customer service only after an approvable offer existed. The actual agents were boss, inventory, and accounting. Inventory used <code>inspect_bulk_pricing_ticket</code> to establish that 8 of 20 size-M hoodies were available. Accounting used <code>get_accounting_snapshot</code> and evaluated the $58 list price, $22 unit cost, and margin without treating the pricing request as a purchase order.</p>
         <p>The corrected run used the pricing-only MCP path and did not call purchase or receipt tools. Boss recorded the authoritative $58 list price as the safe default, with no invented discount. This resolved the pricing decision because the assignment requires human approval for payments, while no rule requires human approval for a Boss pricing decision.</p>
       </div>
 
@@ -173,7 +173,7 @@
         </ol>
       </div>
 
-      <div class="callout"><strong>My overall conclusion:</strong> the strongest evidence of success is not that every ticket closed. It is that the agents resolved 101 and 102 with exact approved cash changes, and refused to fake a solution for 103 when $264 exceeded the available $160. The next improvement is better delegation sequencing and broader operational data, while keeping MCP and human approval as the control points.</div>
+      <div class="callout"><strong>My overall conclusion:</strong> all three tickets are resolved in the final run. Tickets 101 and 102 followed the payment and receipt workflow with human-approved cash changes. Ticket 103 exposed an important earlier mistake: I had treated a <code>price_override</code> request as an automatic hoodie purchase and invented a $104 funding problem. The corrected agents treated it as a pricing decision, recorded the defensible $58 list price, and changed cash by $0. The final workflow keeps MCP as the data boundary, human approval for payments, and Boss decision authority for pricing.</div>
     </section>
 
     <footer>Expected plans are based on MCP results captured from the working database. Actual sections record the real Problem 9 runs; ticket 103 was resolved as a pricing decision at $58 list price with no cash movement.</footer>

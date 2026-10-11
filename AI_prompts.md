@@ -75,8 +75,11 @@
 ## Problem 10 — Reflection
 
 1. Prompt typed: “Open `output/desk_tickets.html` and complete the Reflection tab with a detailed first-person reflection grounded in what actually happened on tickets 101, 102, and 103. Use the expected and actual sections, Cash tab, `resolved_tickets.json`, and `audit_trail.json` as evidence. Evaluate each agent’s performance, delegations, MCP tool calls, approvals, cash changes, outcomes, differences from the expected workflow, and whether those differences helped or hurt. Discuss which tasks could have been simpler with one agent and the tradeoffs in speed, complexity, and coordination. Propose three new problems the current agents and MCP tools can solve, and three problems the current system cannot solve, identifying the additional tools, data, or agents needed. Keep the existing ticket and Cash tabs unchanged, write naturally and critically, avoid unsupported claims, make the Reflection tab readable in a standalone HTML file, and log this prompt under Problem 10.”
-2. Follow-up prompt: Not needed yet.
-3. Nothing was lacking from the prompt given before.
+2. Follow-up prompts:
+   1. “Perform a final detailed check of completed HW5 against all 11 assignment problems. Correct the Reflection tab’s stale claim that Ticket 103 was unresolved due to the $104 shortfall; explain the original mistake and final $58 pricing decision. Verify invoice 501 and rent approvals, Ticket 101’s invoice-gated receipt, screenshots, cash, database, audit trail, JSON results, required files, five agent prompts, MCP tools, and secret hygiene. Do not reset, rerun payments, or fabricate evidence; update this prompt under Problem 10, validate, commit, and report PASS/FAIL/NOT VERIFIED by requirement.”
+3. Why I needed the follow-up:
+   1. The Reflection conclusion still described an earlier failed interpretation of Ticket 103, so I needed to align the final narrative and verify every artifact against the corrected database run.
+
 
 ## Problem 11 — Submit to GitHub
 
