@@ -92,3 +92,9 @@
 
    3. I needed one final host-level check and a clear limitation report rather than repeatedly retrying credentials that were invalid in this environment.
    4. The final pricing fix left stale README, board-heading, and possible screenshot claims, so I needed a consistency scan before submission.
+
+## Problem 8 follow-up — Fix frontend/backend connection
+
+1. Prompt typed: “Fix the React dashboard connection when it runs on `http://localhost:5175` and the FastAPI backend runs on `http://127.0.0.1:8000`. Investigate the API base URL, environment variables, Vite proxy, FastAPI CORS, and response formats. Make all local Vite ports work, load real tickets 101–103, the $160 balance, agent activity, and approvals, preserve design and database results, run tests, update this prompt under Problem 8, commit, and do not claim browser verification unless tested.”
+2. Follow-up prompt: Not needed yet.
+3. Nothing was lacking from the prompt given before.

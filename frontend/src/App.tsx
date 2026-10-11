@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import type { CSSProperties, FormEvent } from 'react'
 import { Activity, BadgeCheck, Banknote, Check, ChevronRight, ClipboardList, Clock3, CreditCard, Heart, LoaderCircle, Package, RefreshCw, Send, Sparkles, Users, X } from 'lucide-react'
 
-const API = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000'
+const API = import.meta.env.VITE_API_BASE_URL ?? (import.meta.env.DEV ? '' : `http://${window.location.hostname}:8000`)
 type Ticket = { id: number; type: string; requester: string; subject: string; status: string; created_at: string }
 type Event = { time?: string; agent_name?: string; action?: string; result?: { summary?: string; actions?: string[]; customer_response_draft?: string }; tool_calls?: { tool: string; args?: unknown; result?: string }[]; stop_reason?: string }
 type Cash = { name: string; balance: number; date: string }

@@ -245,3 +245,7 @@ Final statuses are 101 resolved, 102 resolved, and 103 resolved. Payments remain
 
 
 The historical open/$104 statements above describe failed pre-correction runs. The final corrected run is recorded below and is authoritative for submission.
+
+## Problem 8 follow-up: frontend connection fix
+
+The dashboard previously defaulted to `http://localhost:8000`, which can resolve to IPv6 `::1` while the backend is bound to `127.0.0.1`, and FastAPI CORS only allowed ports 3000 and 5173. The fix uses same-origin `/api` requests in Vite development, proxies `/api` to `http://127.0.0.1:8000`, derives a host-based API URL for non-Vite builds, and allows localhost/127.0.0.1 from any port through a constrained CORS regex. This supports Vite on port 5175 without changing the API response shapes or database.
