@@ -87,6 +87,13 @@
           }
         ],
         "decision": "No approval requested and no payment made because $264 would make checking negative; vendor lead time is 5 days and no discount authority is recorded."
+      },
+      "alternative_resolution_check": {
+        "alternative_vendors": "None qualified for apparel reprint; vendors 2 and 3 are mugs/small goods and local courier.",
+        "smaller_order": "Not a valid resolution because the ticket explicitly requests 20 size-M hoodies and no partial-order authorization exists.",
+        "partial_fulfillment": "Not executed; 8 available units could not be treated as resolution without customer approval or a changed ticket requirement.",
+        "invoice_and_payments": "Invoice 501 is paid; payments 1 and 2 are the only records. No customer revenue or financing record exists.",
+        "conclusion": "No database-supported safe resolution exists with current funds and authority; keep open."
       }
     }
   ],

@@ -220,3 +220,9 @@ The React/Vite/TypeScript dashboard is in `frontend/` and runs with `npm run dev
 - Ticket 103 remains **open**. Inventory found 8 of 20 CC-HOOD-NAVY size-M units; 12 units would cost **$264.00** with a 5-day vendor lead time. Checking was **$160.00**, creating a **$104.00** funding shortfall. No purchase, payment, receipt, discount, or customer message was fabricated.
 - Cash reconciliation: `$3,400.00 - $840.00 - $2,400.00 = $160.00`. The ending value matches `cash_accounts`; only payments 1 and 2 exist, and no negative or duplicate payment occurred.
 - Real agent/MCP activity was appended to `output/audit_trail.json`; the log is append-only. Ticket 103's unresolved funding and pricing-authority issue is intentionally flagged.
+
+## Problem 9 follow-up investigation: Ticket 103
+
+The current working database was inspected without reset. Ticket 103 still requests 20 `CC-HOOD-NAVY` size-M hoodies. `inventory` has 8 size-M units; `pricing` records a $22 unit cost and $58 list price; the 12-unit shortage costs $264. `vendors` contains only Bulldog Print Co for apparel reprint (5 days), Elm City Gifts for mugs/small goods, and QuickShip CT for local courier, so there is no qualified alternate apparel vendor. Invoice 501 is paid, and `payments` contains only the approved $840 invoice payment and $2,400 rent payment. `cash_accounts.checking` is $160.
+
+A smaller order or partial fulfillment was not treated as a resolution because the ticket explicitly requests 20 units and no customer authorization or changed requirement is stored. Paying $264 would make checking negative by $104, and no customer-revenue, financing, or other funding record exists. The existing agent workflow therefore correctly keeps ticket 103 open. Tickets 101 and 102 remain resolved; `$3,400 - $840 - $2,400 = $160`, matching the database.
