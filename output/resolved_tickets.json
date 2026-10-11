@@ -94,6 +94,18 @@
         "partial_fulfillment": "Not executed; 8 available units could not be treated as resolution without customer approval or a changed ticket requirement.",
         "invoice_and_payments": "Invoice 501 is paid; payments 1 and 2 are the only records. No customer revenue or financing record exists.",
         "conclusion": "No database-supported safe resolution exists with current funds and authority; keep open."
+      },
+      "assignment_contradiction": {
+        "required_cash_obligations": {
+          "invoice_501": 840.0,
+          "lease_1_rent": 2400.0,
+          "hoodie_replenishment_12_units": 264.0
+        },
+        "total_if_fully_fulfilled": 3504.0,
+        "starting_cash": 3400.0,
+        "excess_over_starting_cash": 104.0,
+        "proof": "840 + 2400 + (12 * 22) = 3504, and 3504 > 3400. After the already approved first two payments, 160 remains; 160 - 264 = -104.",
+        "system_limits": "No vendor credit, payment terms, scheduling, customer-revenue, financing, or authorized partial-fulfillment record/tool exists."
       }
     }
   ],
