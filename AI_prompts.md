@@ -96,3 +96,9 @@
 1. Prompt typed: “Fix the root cause of Ticket 103. The ticket is type `price_override` with subject Bulk hoodie discount; it asks Yale AI Club for a bulk discount on 20 navy medium hoodies. Review the complete instructions and Boss, Accounting, Inventory, and Customer Service agents. Treat price_override tickets as pricing decisions rather than automatic purchase orders. Inspect actual stock and pricing, determine a defensible recommendation without inventing a discount rate, record the need for human authorization, reset the working database as Problem 9 requires, rerun all three tickets, preserve approvals and cash guards, update all dashboard/report/audit/harness/reflection artifacts, test, commit, and explain the root cause and final balance. Do not falsely resolve a ticket without pricing authorization.”
 2. Follow-up prompt: Not needed yet.
 3. Nothing was lacking from the prompt given before.
+
+## Problem 9 follow-up — Resolve authorized pricing decisions
+
+1. Prompt typed: “Review the assignment rules and distinguish mandatory human approval for payments from approval requirements for pricing decisions. Do not invent a discount approval requirement. If Boss and Accounting are authorized to decide pricing, evaluate $58 list price, $22 unit cost, 20 requested units, and 8 in stock, make and record a defensible pricing decision through MCP, and resolve ticket 103 without cash movement. If approval is genuinely required, implement it. Update all Problem 9 artifacts, screenshots, audit trail, and prompt log based on actual execution, verify all three statuses and cash, and commit.”
+2. Follow-up prompt: Not needed yet.
+3. Nothing was lacking from the prompt given before.

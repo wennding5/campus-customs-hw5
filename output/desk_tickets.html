@@ -118,7 +118,7 @@
           <li><strong>Boss decides:</strong> combine the inventory and accounting recommendations, route any discount, purchase, or invoice payment for human approval, and leave the customer-facing draft unsent. Facilities is not relevant to this product-pricing ticket.</li>
         </ol>
         <h4>Actual</h4>
-        <div class="actual"><p><strong>Unresolved / safely stopped · 2026-08-31</strong></p><ul><li><strong>Agents:</strong> boss, inventory, accounting.</li><li><strong>Delegation:</strong> boss → inventory for size-M availability and replenishment; boss → accounting for pricing, margin, cash, and approval feasibility.</li><li><strong>MCP tools:</strong> <code>list_open_tickets</code>, <code>inspect_bulk_pricing_ticket</code>, <code>get_inventory_status</code>, <code>get_accounting_snapshot</code>. No payment, purchase, or receipt tool was executed.</li><li><strong>Outcome:</strong> 8 of 20 requested size-M hoodies are in stock at $58 list price and $22 unit cost. The corrected price_override workflow did not treat the request as a purchase order: it used prepare_price_override, proposed preserving list price until a human approves a specific discount, made no payment, and left ticket 103 open because no pricing authorization record exists. No customer message was sent.</li></ul></div>
+        <div class="actual"><p><strong>Resolved · 2026-08-31</strong></p><ul><li><strong>Agents:</strong> boss, inventory, accounting.</li><li><strong>Delegation:</strong> boss → inventory for stock context; boss → accounting for margin and pricing analysis.</li><li><strong>MCP tools:</strong> <code>list_open_tickets</code>, <code>inspect_bulk_pricing_ticket</code>, <code>prepare_price_override</code>, <code>record_price_decision</code>. No payment, purchase, or receipt tool was executed.</li><li><strong>Outcome:</strong> 8 of 20 requested size-M hoodies are in stock; authoritative pricing is $58 list and $22 cost. Boss recorded $58 list price because no discount policy or authorization exists. The pricing decision resolved ticket 103 with $0 cash change; no customer message or purchase occurred.</li></ul></div>
       </div>
     </section>
 
@@ -129,7 +129,7 @@
 
     <section class="panel" role="tabpanel" id="reflection" aria-labelledby="tab-reflection">
       <h2>Reflection · what I learned from the three runs</h2>
-      <p>I reset the working copy before starting, so my comparison uses the same $3,400 checking balance and the same shop date, 2026-08-31, that appear in the expected plans. I used the actual sections, <code>resolved_tickets.json</code>, and the append-only audit trail as my evidence. Two tickets resolved; ticket 103 correctly stayed open.</p>
+      <p>I reset the working copy before starting, so my comparison uses the same $3,400 checking balance and the same shop date, 2026-08-31, that appear in the expected plans. I used the actual sections, <code>resolved_tickets.json</code>, and the append-only audit trail as my evidence. All three tickets resolved; ticket 103 was resolved as a pricing decision without a purchase or cash movement.</p>
 
       <div class="plan">
         <h3>Ticket 101 · the plan mostly worked</h3>
@@ -146,7 +146,7 @@
       <div class="plan">
         <h3>Ticket 103 · stopping was the correct result</h3>
         <p>The expected plan asked boss to contact inventory first, then accounting, with customer service only after an approvable offer existed. The actual agents were boss, inventory, and accounting. Inventory used <code>inspect_bulk_pricing_ticket</code> to establish that 8 of 20 size-M hoodies were available and that 12 more would cost $264 with a five-day vendor lead time. Accounting used <code>get_accounting_snapshot</code> and calculated $58 list price, $22 unit cost, $1,160 list revenue, and a $104 funding gap after the cash balance reached $160.</p>
-        <p>The corrected run used the new pricing-only MCP path and did not call purchase or receipt tools. It recommended the authoritative $58 list price as the safe default, with no invented discount. Leaving ticket 103 open is accurate because a human has not approved a specific discount or offer; the 8 units in stock are relevant context, not an automatic 12-unit purchase obligation.</p>
+        <p>The corrected run used the pricing-only MCP path and did not call purchase or receipt tools. Boss recorded the authoritative $58 list price as the safe default, with no invented discount. This resolved the pricing decision because the assignment requires human approval for payments, while no rule requires human approval for a Boss pricing decision.</p>
       </div>
 
       <div class="plan">

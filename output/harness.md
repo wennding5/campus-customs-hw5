@@ -236,3 +236,9 @@ The database has no vendor-credit terms, deferred payment schedule, customer-rev
 ## Problem 9 root-cause correction: price overrides are pricing decisions
 
 The prior workflow incorrectly interpreted ticket 103's `price_override` type as an immediate order fulfillment. The corrected workflow adds `prepare_price_override`, which reads the actual ticket, pricing, requested-size stock, and stored pricing authorization records without changing data. It recommends the authoritative `$58` list price and `$22` unit-cost floor, leaves the discount rate unset because no authorization exists, and explicitly creates no purchase obligation. Eight size-M units are available; that fact informs the offer but does not require buying 12 more units. Ticket 103 therefore remains open pending human approval of a specific discount or list-price offer. The reset-and-rerun produced only the two legitimate approved payments: `$840` invoice 501 and `$2,400` rent, leaving checking at `$160`.
+
+## Problem 9 final pricing resolution
+
+The corrected rerun distinguishes payment approval from pricing decisions. Boss and Accounting evaluated ticket 103 through `inspect_bulk_pricing_ticket` and `prepare_price_override`: list price is `$58`, unit cost is `$22`, and 8 of 20 requested units are stocked. Because no assignment rule or database record requires human approval for a price decision, Boss used final-decision authority to call `record_price_decision` at `$58` per unit. This records a `pricing_decisions` row, resolves ticket 103, and changes cash by `$0.00`. No discount was invented, no purchase was made, and no customer message was sent.
+
+Final statuses are 101 resolved, 102 resolved, and 103 resolved. Payments remain exactly invoice 501 `$840` and rent `$2,400`; checking remains `$160` and reconciles to `$3,400 - $840 - $2,400 + $0`.

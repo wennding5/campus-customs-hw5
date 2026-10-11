@@ -247,6 +247,34 @@ def resolve_ticket(ticket_id: int, resolution: str) -> dict[str, Any]:
 
 
 @mcp.tool()
+def record_price_decision(ticket_id: int, unit_price: float, rationale: str, decided_by: str = "boss") -> dict[str, Any]:
+    """Record an authorized price_override decision and resolve it without moving cash."""
+    if unit_price <= 0 or not rationale.strip() or not decided_by.strip():
+        raise ValueError("A positive price, rationale, and decision maker are required")
+    with _write_connect() as connection:
+        connection.execute("BEGIN IMMEDIATE")
+        ticket = connection.execute("SELECT * FROM tickets WHERE id = ? AND type = 'price_override'", (ticket_id,)).fetchone()
+        if ticket is None:
+            raise ValueError("Price-override ticket does not exist")
+        pricing = connection.execute("SELECT * FROM pricing WHERE sku = ?", (ticket["sku"],)).fetchone()
+        if pricing is None:
+            raise ValueError("Pricing record does not exist")
+        if unit_price < pricing["unit_cost"] or unit_price > pricing["list_price"]:
+            raise ValueError("Decision price must be between unit cost and list price")
+        connection.execute("""CREATE TABLE IF NOT EXISTS pricing_decisions (
+            ticket_id INTEGER PRIMARY KEY, unit_price REAL NOT NULL, rationale TEXT NOT NULL,
+            decided_by TEXT NOT NULL, decided_at TEXT NOT NULL
+        )""")
+        try:
+            connection.execute("INSERT INTO pricing_decisions VALUES (?, ?, ?, ?, (SELECT date_today FROM desk LIMIT 1))", (ticket_id, unit_price, rationale.strip(), decided_by.strip()))
+        except sqlite3.IntegrityError as exc:
+            raise ValueError("A pricing decision already exists for this ticket") from exc
+        resolution = f"Pricing decision recorded at ${unit_price:.2f} per unit by {decided_by.strip()}: {rationale.strip()}"
+        connection.execute("UPDATE tickets SET status = 'resolved', notes = ? WHERE id = ?", (f"{ticket['notes'] or ''} Resolution: {resolution}", ticket_id))
+        return {"ticket_id": ticket_id, "unit_price": unit_price, "decided_by": decided_by.strip(), "resolution": resolution, "cash_change": 0.0, "status": "resolved"}
+
+
+@mcp.tool()
 def reset_working_database() -> dict[str, Any]:
     """Reset the working DB from the untouched original and return both file paths."""
     if not ORIGINAL_DB_PATH.is_file():

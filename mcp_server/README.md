@@ -43,3 +43,5 @@ Install the Python MCP SDK in the agent environment, then run `python3 mcp_serve
 ### Price override correction
 
 `prepare_price_override(ticket_id=103)` is the pricing-only path for `price_override` tickets. It reads list price, unit cost, requested-size stock, and any stored authorization, returns a recommendation, and never purchases stock or changes the database. Agents must not convert a discount request into replenishment unless a separate authorized purchase decision exists.
+
+`record_price_decision(ticket_id, unit_price, rationale, decided_by)` records a Boss/authorized pricing decision between unit cost and list price, resolves the `price_override` ticket, and makes no cash or inventory change. Payment approval rules do not apply unless the decision also requests a payment.
