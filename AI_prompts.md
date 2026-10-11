@@ -79,9 +79,11 @@
    1. “Perform a final detailed check of completed HW5 against all 11 assignment problems. Correct the Reflection tab’s stale claim that Ticket 103 was unresolved due to the $104 shortfall; explain the original mistake and final $58 pricing decision. Verify invoice 501 and rent approvals, Ticket 101’s invoice-gated receipt, screenshots, cash, database, audit trail, JSON results, required files, five agent prompts, MCP tools, and secret hygiene. Do not reset, rerun payments, or fabricate evidence; update this prompt under Problem 10, validate, commit, and report PASS/FAIL/NOT VERIFIED by requirement.”
    2. “Perform a final HW5 rubric audit against Problems 1–11. Correct Actual tool names from pay_invoice/pay_rent to approve_payment plus receipt/resolution tools, correct the Reflection’s stale $104 financing examples, distinguish actual PydanticAI runs from direct MCP actions and manual audit summaries, verify all artifacts and database/payment consistency, preserve resolved tickets and $160 cash, log this follow-up, validate, and commit.”
 
+   3. “In `output/desk_tickets.html`, replace the stale third solvable-problem sentence claiming Ticket 103 demonstrated insufficient funding with the corrected pricing-workflow sentence. Verify no other Reflection statement treats the $104 shortfall as the final Ticket 103 outcome, confirm all statuses and $160 cash, preserve databases/payments/workflows/screenshots/audit, log this follow-up under Problem 10, validate HTML, and commit.”
 3. Why I needed the follow-up:
    1. The Reflection conclusion still described an earlier failed interpretation of Ticket 103, so I needed to align the final narrative and verify every artifact against the corrected database run.
    2. The rubric audit found stale payment-tool names and financial language, and the evidence needed a clear distinction between prior PydanticAI analysis and the final direct MCP pricing action.
+   3. One remaining Reflection example still described insufficient funding as the Ticket 103 result, so I needed to replace only that superseded claim.
 
 
 ## Problem 11 — Submit to GitHub

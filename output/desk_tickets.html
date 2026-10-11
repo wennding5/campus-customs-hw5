@@ -160,7 +160,7 @@
         <ol>
           <li><strong>Single-item stockout with an unpaid vendor invoice.</strong> Inventory can inspect SKU and size, accounting can inspect the invoice and cash, and customer service can draft a truthful delay or partial-fulfillment response. After human approval, <code>approve_payment</code>, <code>receive_restock</code>, and <code>resolve_ticket</code> can complete the same pattern as ticket 101.</li>
           <li><strong>A new rent or lease notice.</strong> Facilities can read the lease and <code>desk.date_today</code>, accounting can check existing rent payments and the checking balance, and boss can route a human-approved <code>approve_payment(kind="rent")</code> request without involving product agents.</li>
-          <li><strong>A small bulk order with enough cash and known pricing.</strong> Inventory and accounting can compare available units, unit cost, list price, vendor lead time, and cash; customer service can draft an offer; then a human can approve the purchase or invoice payment. The ticket 103 run demonstrates that the same tools can also stop safely when funding is insufficient.</li>
+          <li><strong>A small bulk order with enough cash and known pricing.</strong> Inventory and accounting can compare available units, unit cost, list price, vendor lead time, and cash; customer service can draft an offer; then a human can approve the purchase or invoice payment. The corrected Ticket 103 workflow demonstrates that the team can make a pricing decision without automatically triggering an inventory purchase or unnecessary cash movement.</li>
         </ol>
       </div>
 
