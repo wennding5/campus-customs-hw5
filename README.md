@@ -64,4 +64,4 @@ This copies `data/campus_customs.db` over `data/campus_customs_new.db` and does 
 
 ## Evidence
 
-Open `output/desk_tickets.html` and `output/resolved_board.html` directly in a browser. The board report uses relative paths under `output/board_screens/`. `output/resolved_tickets.json` and the append-only `output/audit_trail.json` record the actual run. Ticket 103 is intentionally still open: the recorded $264 replenishment need exceeded the $160 checking balance by $104, so no unsafe payment was made.
+Open `output/desk_tickets.html` and `output/resolved_board.html` directly in a browser. The board report uses relative paths under `output/board_screens/`. `output/resolved_tickets.json` and the append-only `output/audit_trail.json` record the actual run. Ticket 103 is resolved as a Boss pricing decision at the authoritative $58 list price. No replenishment purchase or cash movement was required; ending checking is $160 after the approved $840 invoice and $2,400 rent payments.
