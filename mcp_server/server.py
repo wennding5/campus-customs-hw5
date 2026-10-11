@@ -292,6 +292,32 @@ def inspect_customer_order_ticket(ticket_id: int = 101) -> dict[str, Any]:
 
 
 @mcp.tool()
+def prepare_price_override(ticket_id: int = 103) -> dict[str, Any]:
+    """Prepare a pricing recommendation for a price_override ticket without purchasing stock or changing data."""
+    with _connect() as connection:
+        ticket = _one(connection, "SELECT * FROM tickets WHERE id = ? AND type = 'price_override'", (ticket_id,))
+        pricing = _one(connection, "SELECT * FROM pricing WHERE sku = ?", (ticket["sku"],))
+        requested = _one(connection, "SELECT * FROM inventory WHERE sku = ? AND size = ?", (ticket["sku"], ticket["size"]))
+        approved_discount = _many(connection, "SELECT date_today, notes FROM desk WHERE notes LIKE '%discount%' OR notes LIKE '%pricing%'")
+        return {
+            "ticket": ticket,
+            "pricing": pricing,
+            "requested_size_stock": requested,
+            "pricing_authorization_records": approved_discount,
+            "recommendation": {
+                "list_price": pricing["list_price"],
+                "unit_cost_floor": pricing["unit_cost"],
+                "discount_rate": None,
+                "discount_amount": None,
+                "reason": "No authorized discount rate is stored; preserve list price until a human approves a specific discount.",
+                "stock_note": f"{requested['qty']} of {ticket['qty']} requested units are currently available; pricing analysis does not create a purchase obligation."
+            },
+            "needs_human_approval": True,
+            "changes_made": False,
+        }
+
+
+@mcp.tool()
 def inspect_rent_ticket(ticket_id: int = 102) -> dict[str, Any]:
     """Return lease, cash, and payment facts needed for rent ticket 102."""
     with _connect() as connection:

@@ -16,6 +16,8 @@ The complete tool list is:
 
 `inspect_bulk_pricing_ticket(ticket_id=103)` reads the ticket, all size rows for the requested SKU from `inventory`, the SKU's `pricing`, apparel/reprint `vendors`, open `invoices`, and `cash_accounts`. It gives an agent the available quantity, replenishment amount, authoritative cost and list price, vendor lead-time options, unpaid-invoice blocks, and cash context needed for the bulk hoodie request.
 
+`prepare_price_override(ticket_id=103)` reads the ticket, pricing, size-level stock, and any stored pricing authorization records. It returns a list-price/unit-cost recommendation and explicitly does not purchase stock or change the database.
+
 `get_accounting_snapshot()` reads `desk`, `cash_accounts`, `invoices`, `payments`, `pricing`, and `vendors` for cash, invoice, margin, and purchase-order preparation.
 
 `get_facilities_snapshot()` reads `desk`, `leases`, `cash_accounts`, and rent `payments` for lease and shop-expense decisions.
@@ -37,3 +39,7 @@ All tools return JSON-serializable structured dictionaries and perform `SELECT` 
 ## Later connection
 
 Install the Python MCP SDK in the agent environment, then run `python3 mcp_server/server.py` from the HW 5 folder when the agents are ready to connect. The server uses stdio transport through FastMCP's default `run()` behavior.
+
+### Price override correction
+
+`prepare_price_override(ticket_id=103)` is the pricing-only path for `price_override` tickets. It reads list price, unit cost, requested-size stock, and any stored authorization, returns a recommendation, and never purchases stock or changes the database. Agents must not convert a discount request into replenishment unless a separate authorized purchase decision exists.
